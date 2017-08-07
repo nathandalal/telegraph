@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import MorseTree from './morse_tree.jsx'
 
-export default class About extends React.Component {
+export default class Encoding extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -26,7 +26,7 @@ export default class About extends React.Component {
 				<p>This text comes from <a href="/api">an API located here</a>.</p>
 				<pre>{this.state.text}</pre>
 
-				<MorseTree />
+				<MorseTree currentCode={"."}/>
 			</div>
 		)
 	}

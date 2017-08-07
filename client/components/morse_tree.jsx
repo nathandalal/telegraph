@@ -6,7 +6,7 @@ import morse from '../utils/morse'
 export default class MorseTree extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { screenWidth: window.innerWidth, activeMorseText: "._" }
+    this.state = { screenWidth: window.innerWidth }
     this.updateDimensions = this.updateDimensions.bind(this)
   }
 
@@ -14,6 +14,7 @@ export default class MorseTree extends React.Component {
     this.setState({screenWidth: window.innerWidth})
   }
   componentDidMount() {
+    this.forceUpdate()
     window.addEventListener("resize", this.updateDimensions.bind(this))
   }
   componentWillUnmount() {
@@ -21,14 +22,18 @@ export default class MorseTree extends React.Component {
   }
 
   render() {
-    let { activeMorseText, screenWidth } = this.state
+    let { screenWidth } = this.state
+    let { currentCode } = this.props
 
-    let possibleNodes = morse.decodePrefix(activeMorseText)
-    if(!activeMorseText) possibleNodes.push("Start")
+    let possibleNodes = morse.decodePrefix(currentCode)
+    if(!currentCode) possibleNodes.push("Start")
 
     return (
       <div className="container has-text-centered">
-        {this.renderNode("Start", ["e", "t"], activeMorseText == "" ? "" : "neutral", activeMorseText == "", screenWidth > 768 ? "large" : "medium")}
+        <h3 className="title">Morse Code Tree</h3>
+        <h6 className="subtitle">Follow <code className="has-text-info">. . .</code> on dots, and <code className="has-text-danger">_ _ _</code> on dashes.</h6>
+        <h6>Current Morse State: <code>{currentCode ? currentCode : "Initial"}</code></h6>
+        {this.renderNode("Start", ["e", "t"], currentCode == "" ? "" : "neutral", currentCode == "", screenWidth > 768 ? "large" : "medium")}
         {Array(5).fill(0).map((n, i) => (
           <div className="block" key={i}>
             <div style={{height: 50}}/>
@@ -37,7 +42,7 @@ export default class MorseTree extends React.Component {
                 node.text,
                 node.children, 
                 possibleNodes.find(s => s == (node.text.length == 4 ? node.text.charAt(0) : node.text)) ? node.type : "neutral",
-                activeMorseText == node.text)
+                currentCode === morse.encode(node.text)[0])
             ))}
           </div>
         ))}
@@ -49,15 +54,17 @@ export default class MorseTree extends React.Component {
     return (
       <span style={{margin: "0.5%"}} key={text}>
         <span className={`is-character-${text}`}>
-          <span className={`tag is-${size} 
-            is-${text.length == 4 ? "light" : (isActive ? "primary" : (type == "_" ? "danger" : (type == "." ? "info" : "light")))}`}>
+          <span className={`tag is-${size} tooltip 
+            is-${text.length == 4 ? "light" : (type == "_" ? "danger" : (type == "." ? "info" : "light"))} ${isActive ? "animated jello" : ""}`}
+            data-tooltip={`${text.length == 1 ? morse.encode(text)[0].split("").join(" ") : "Not a morse character."}`}
+            style={{border: isActive ? "2px solid #303030" : "1px solid gray"}}>
             {text.length == 4 ? text.charAt(2) : text.toUpperCase()}
           </span>
           {children.map((child, i) => (
             <LineTo key={i} className="inline-block"
               from={`is-character-${text}`} to={`is-character-${child}`}
               fromAnchor="bottom center" toAnchor="top center"
-              border={`2px solid ${(type == "neutral") ? "hsl(0, 0%, 71%)" : (i == 0 ? "hsl(217, 71%, 53%)" : "hsl(348, 100%, 61%)")}`} zIndex={-1}/>
+              border={`2px ${(i == 0 ? `dotted hsl(217, ${type == "neutral" ? "20%" : "71%"}, 53%)` : `dashed hsl(348, ${type == "neutral" ? "30%" : "100%"}, 61%)`)}`} zIndex={-1}/>
           ))}
         </span>
       </span>

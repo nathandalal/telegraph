@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Home = () => {
+const Lesson = () => {
   let structure = [
     {name: "app.js",
       description: "The index file run to start the Express server."},
@@ -45,4 +45,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Lesson

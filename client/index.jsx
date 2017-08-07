@@ -2,8 +2,12 @@ import React from 'react'
 import { render } from 'react-dom'
 import { BrowserRouter as Router, Switch, Route, Redirect, Link } from 'react-router-dom'
 
-import Home from './components/home.jsx'
-import About from './components/about.jsx'
+import Lesson from './components/lesson.jsx'
+import Encoding from './components/encoding.jsx'
+import Decoding from './components/decoding.jsx'
+import Quiz from './components/quiz.jsx'
+
+import Footer from './components/footer.jsx'
 
 class Index extends React.Component {
   constructor(props) {
@@ -11,21 +15,28 @@ class Index extends React.Component {
   }
 
   render() {
-    let routes = [
-      { path: "/",           name: "Home",        btnType: "primary",   component: Home },
-      { path: "/about",      name: "About",       btnType: "info",      component: About }
+    let main_routes = [
+      { path: "/",              name: "Lesson",           icon: "graduation-cap",   component: Lesson },
+      { path: "/encode",        name: "Encoding",         icon: "lock",             component: Encoding },
+      { path: "/decode",        name: "Decoding",         icon: "unlock",           component: Decoding },
+      { path: "/quiz",          name: "Quiz",             icon: "pencil",           component: Quiz },
     ]
+
+    let routes = main_routes.concat([
+      { path: "/encode/:text",        component: Encoding},
+      { path: "/decode/:text",        component: Decoding},
+    ])
 
     return (
       <Router>
-        <div style={{padding: "5%"}}>
-        <Switch>
-            {routes.map(route => <Route exact path={route.path} component={route.component} key={route.path} />)}
-            <Redirect to ="/"/>
-          </Switch>
-          <div className="block">
-            {routes.map(route => <Link to={route.path} className={`button is-${route.btnType}`} key={route.path}>{route.name}</Link>)}
+        <div style={{display: "flex", minHeight: "100vh", flexDirection: "column"}}>
+          <div id="main-content" style={{flex: 1, padding: "5%"}}>
+            <Switch>
+              {routes.map(route => <Route exact path={route.path} component={route.component} key={route.path} />)}
+              <Redirect to ="/"/>
+            </Switch>
           </div>
+          <Route component={(props) => <Footer routes={main_routes} {...props}/>}/>
         </div>
       </Router>
     )
