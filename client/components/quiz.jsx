@@ -14,18 +14,18 @@ export default class Quiz extends React.Component {
   getInitialState() {
     return {
       questionsNeededToPass: 2,
-      questions: this.getTwoQuestions()
+      questions: this.getTwoQuestions(true)
     }
   }
 
-  getTwoQuestions() {
+  getTwoQuestions(tiny = false) {
     return [
       {
-        normalWord: getRandomWord(),
+        normalWord: getRandomWord(tiny),
         userAnswer: ""
       },
       {
-        morseWord: morse.encode(getRandomWord())[0],
+        morseWord: morse.encode(getRandomWord(tiny))[0],
         userAnswer: ""
       }
     ]
@@ -78,14 +78,14 @@ export default class Quiz extends React.Component {
         <label className="label">
           {info.label}&nbsp;
           <code>{info.prompt}</code>
-          <Link className="button is-small pull-right" to={`/${info.label.toLowerCase()}/${info.prompt}`}>Show Me</Link>
+          <Link className="button is-small pull-right" target="_blank" rel="noopener" to={`/${info.label.toLowerCase()}/${info.prompt}`}>Show Me</Link>
         </label>
         {info.label == "Encode" ? <small>You can hover over any letter in the tree to get its individual morse code.</small> : ""}
         <p className="control has-icons-left has-icons-right" style={{clear: "both"}}>
           <input className={`input
             ${this.isCorrectInput(info) || !(info.value) ? "" : "is-danger"}`}
             type="text" value={info.value} disabled={this.isCorrectInput(info)}
-            placeholder={info.label == "Encode" ? "Enter valid characters to encode." : "Only . _ and spaces allowed."}
+            placeholder={info.label == "Encode" ? "Only . _ and spaces allowed." : "Enter valid characters to encode."}
             onChange={((event) => {
               let currentRegex = info.label == "Encode" ? morse.validMorseRegex : morse.validWordRegex
               if(currentRegex.test(event.target.value)) {
