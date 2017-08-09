@@ -1,5 +1,4 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import LineTo from 'react-lineto'
 import morse from '../utils/morse'
 
@@ -30,10 +29,9 @@ export default class MorseTree extends React.Component {
 
     return (
       <div className="container has-text-centered">
-        <h3 className="title">Morse Code Tree</h3>
-        <h6 className="subtitle">Follow <code className="has-text-info">. . .</code> on dots, and <code className="has-text-danger">_ _ _</code> on dashes.</h6>
-        <h6>Current Morse State: <code>{currentCode ? currentCode : "Initial"}</code></h6>
+        {this.renderHeading()}
         {this.renderNode("Start", ["e", "t"], currentCode == "" ? "" : "neutral", currentCode == "", screenWidth > 768 ? "large" : "medium")}
+
         {Array(5).fill(0).map((n, i) => (
           <div className="block" key={i}>
             <div style={{height: 50}}/>
@@ -41,11 +39,30 @@ export default class MorseTree extends React.Component {
               this.renderNode(
                 node.text,
                 node.children, 
-                possibleNodes.find(s => s == (node.text.length == 4 ? node.text.charAt(0) : node.text)) ? node.type : "neutral",
+                currentCode ? (currentCode.startsWith(morse.encode(node.text)[0]) ? node.type : "neutral") : node.type,
                 currentCode === morse.encode(node.text)[0])
             ))}
           </div>
         ))}
+      </div>
+    )
+  }
+
+  renderHeading() {
+    let { currentCode } = this.props
+
+    return (
+      <div className="content">
+        <h3 className="title">Morse Code Tree</h3>
+        <h6 className="subtitle">
+          Follow <code className="has-text-info">. . .</code> on dots, and <code className="has-text-danger">_ _ _</code> on dashes.
+        </h6>
+        <h6>
+          Current Morse State:&nbsp;
+          <code>
+            {currentCode ? `${currentCode} (${morse.decode([currentCode])[0].toUpperCase()})` : "Initial"}
+          </code>
+        </h6>
       </div>
     )
   }

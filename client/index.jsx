@@ -1,6 +1,6 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { BrowserRouter as Router, Switch, Route, Redirect, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 
 import Lesson from './components/lesson.jsx'
 import Encoding from './components/encoding.jsx'
@@ -30,7 +30,7 @@ class Index extends React.Component {
     return (
       <Router>
         <div style={{display: "flex", minHeight: "100vh", flexDirection: "column"}}>
-          <div id="main-content" style={{flex: 1, padding: "5%"}}>
+          <div id="main-content" className="content" style={{flex: 1, padding: "5%"}}>
             <Switch>
               {routes.map(route => <Route exact path={route.path} component={route.component} key={route.path} />)}
               <Redirect to ="/"/>

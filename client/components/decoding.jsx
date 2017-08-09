@@ -1,6 +1,5 @@
 import React from 'react'
-import axios from 'axios'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import Slider from 'react-rangeslider'
 
@@ -8,31 +7,29 @@ import MorseTree from './morse_tree.jsx'
 import morse from '../utils/morse'
 
 export default class Decoding extends React.Component {
-	constructor(props) {
-		super(props)
-		this.state = this.getInitialState()
-		this.timeouts = []
-	}
+  constructor(props) {
+    super(props)
+    this.state = this.getInitialState()
+    this.timeouts = []
+  }
 
-	getInitialState() {
-		return {
-			text: this.props.match.params.text || "",
-			currentMorseCharacter: "",
-			currentMorseState: "",
-			answer: "",
-			delayms: 1000,
-			currentIndex: -1,
-			showControls: false
-		}
-	}
+  getInitialState(text = (this.props.match.params.text || ""), delayms = 1500) {
+    return {
+      text: text,
+      currentMorseCharacter: "",
+      currentMorseState: "",
+      answer: "",
+      delayms: delayms,
+      currentIndex: -1,
+      showControls: false
+    }
+  }
 
-	componentDidMount() {
-		this.clearTimeouts()
-		this.timeouts = []
-		console.log(this.state.text)
-		if(this.state.text)
-			this.startAnimation()
-	}
+  componentDidMount() {
+    this.clearTimeouts()
+    if(this.state.text)
+      this.startAnimation()
+  }
 
   componentWillUnmount() {
     this.clearTimeouts()
@@ -40,90 +37,94 @@ export default class Decoding extends React.Component {
 
   clearTimeouts() {
     this.timeouts.forEach(clearTimeout)
+    this.timeouts = []
   }
 
-	startAnimation() {
-		this.props.history.push(`/decode/${this.state.text}`)
-		this.setState(this.getInitialState())
-		let currentMorseText = this.props.match.params.text
-		let characters = currentMorseText.split(" ")
-		let answer = morse.decode([currentMorseText])
+  startAnimation() {
+    this.clearTimeouts()
+    this.props.history.push(`/decode/${this.state.text}`)
+    this.setState(this.getInitialState(this.state.text, this.state.delayms))
 
-		let delayms = this.state.delayms == 0 ? 100 : this.state.delayms
+    let currentMorseText = this.state.text
+    let characters = currentMorseText.split(" ")
+    let answer = morse.decode([currentMorseText])
+
+    let delayms = this.state.delayms == 0 ? 100 : this.state.delayms
     let ms = -delayms
 
     characters.forEach((charText, answerIndex) => {
       this.updateCurrentMorseCharacter(charText, answerIndex, ms = ms + delayms)
       charText.split("").forEach((char, charTextIndex) => {
-      	this.updateCurrentMorseState(charText.substr(0, charTextIndex + 1), ms = ms + delayms)
+        this.updateCurrentMorseState(charText.substr(0, charTextIndex + 1), ms = ms + delayms)
       })
       this.updateCurrentAnswer(answer.substr(0, answerIndex + 1), ms = ms + delayms)
     })
 
     this.markDone(ms = ms + delayms)
-	}
-	
-	updateCurrentMorseCharacter(charText, answerIndex, delayms) {
-		this.timeouts.push(setTimeout((() => {
+  }
+  
+  updateCurrentMorseCharacter(charText, answerIndex, delayms) {
+    this.timeouts.push(setTimeout((() => {
       this.setState({currentIndex: answerIndex, currentMorseCharacter: charText, currentMorseState: ""})
     }).bind(this), delayms))
-	}
+  }
 
-	updateCurrentMorseState(charSoFar, delayms) {
-		this.timeouts.push(setTimeout((() => {
+  updateCurrentMorseState(charSoFar, delayms) {
+    this.timeouts.push(setTimeout((() => {
       this.setState({currentMorseState: charSoFar})
     }).bind(this), delayms))
-	}
+  }
 
-	updateCurrentAnswer(answerSoFar, delayms) {
-		this.timeouts.push(setTimeout((() => {
+  updateCurrentAnswer(answerSoFar, delayms) {
+    this.timeouts.push(setTimeout((() => {
       this.setState({answer: answerSoFar})
     }).bind(this), delayms))
-	}
+  }
 
-	markDone(delayms) {
-		this.timeouts.push(setTimeout((() => {
-      this.setState({currentIndex: -1})
+  markDone(delayms) {
+    this.timeouts.push(setTimeout((() => {
+      this.setState({currentIndex: -1, currentMorseState: "", currentMorseCharacter: ""})
     }).bind(this), delayms))
-	}
+  }
 
-	render() {
-		return (
-			<div className="content">
-				<div className="columns container">
-					<div className="column is-one-thirds">
-						{this.renderInput()}
-						{this.renderTopButtons()}
-						{this.renderAnimation()}
-					</div>
-					<div className="column is-two-thirds">
-						<MorseTree currentCode={this.state.currentMorseState}/>
-					</div>
-				</div>
-			</div>
-		)
-	}
+  render() {
+    return (
+      <div className="content">
+        <div className="columns container">
+          <div className="column is-one-thirds">
+            {this.renderInput()}
+            {this.renderTopButtons()}
+            {this.renderAnimation()}
+          </div>
+          <div className="column is-two-thirds">
+            <MorseTree currentCode={this.state.currentMorseState}/>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
-	renderInput() {
-		return (
-			<div>
-				<div className="field has-addons">
-				  <p className="control is-expanded">
-				    <input className="input" type="text" placeholder="Only . _ and spaces allowed." value={this.state.text}
-				    	onChange={(({target}) => /^[.\s_]*$/.test(target.value) ? this.setState({text: target.value}) : null).bind(this)}
-				    	onKeyPress={(({key}) => key == "Enter" ? this.startAnimation() : null).bind(this)}/>
-				  </p>
-				  <p className="control">
-				    <a className="button is-primary" onClick={this.startAnimation.bind(this)}>
-				      Decode
-				    </a>
-				  </p>
-				</div>
-			</div>
-		)
-	}
+  renderInput() {
+    return (
+      <div>
+        <div className="field has-addons">
+          <p className="control is-expanded">
+            <input className="input" type="text" placeholder="Only . _ and spaces allowed." value={this.state.text}
+              onChange={(({target}) => morse.validMorseRegex.test(target.value) ? this.setState({text: target.value}) : null).bind(this)}
+              onKeyPress={(({key}) => key == "Enter" ? this.startAnimation() : null).bind(this)}
+              style={{fontFamily: "Consolas,Monaco,Lucida Console,monospace"}}/>
+          </p>
+          <p className="control">
+            <a className="button is-primary" onClick={this.startAnimation.bind(this)}>
+              Decode
+            </a>
+          </p>
+        </div>
+      </div>
+    )
+  }
 
-	renderTopButtons() {
+  renderTopButtons() {
     return (
       <div className="block pull-right">
         {this.props.match.params.text ? <CopyToClipboard text={morse.decode([this.props.match.params.text])}>
@@ -137,29 +138,42 @@ export default class Decoding extends React.Component {
     )
   }
 
-	renderAnimation() {
-		let text = this.props.match.params.text
+  renderAnimation() {
+    let text = this.props.match.params.text
 
-		return (
-			<div className="box content">
-				<div style={{clear: "both"}}>
-					{this.state.showControls ? this.renderControls() : ""}
-					{this.state.currentIndex !== -1 && !text ? "Animation unstarted." : ""}
-					{text ? 
-					<div>
-						{this.state.currentIndex == -1 ? 
-							<span className="tag is-primary pull-right">Done</span> :
-							<span className="tag is-info pull-right">Translating <tt>{text.split(" ")[this.state.currentIndex]}</tt></span>}
-						<h5 style={{clear: "both"}}>Morse Text: <code className="animated bounce">{text}</code></h5>
-						<h5>Decoded Text: <code className="animated bounce">{this.state.answer || "in progress..."}</code></h5>
-					</div> : ""}
-				</div>
-			</div>
-		)
-	}
+    return (
+      <div className="box content">
+        <div style={{clear: "both"}}>
+          {this.state.showControls ? this.renderControls() : ""}
+          {this.state.currentIndex == -1 && !text ? "Animation unstarted. Enter some morse code!" : ""}
+          {text ? 
+          <div>
+            {this.state.currentIndex == -1 ? 
+              <span className="tag is-primary pull-right"><span className="icon is-small"><i className="fa fa-check"/></span><span>Done</span></span> :
+              <span className="tag is-info pull-right">Translating:&nbsp;<tt>{text.split(" ")[this.state.currentIndex].split("").join(" ")}</tt></span>}
+            <div style={{clear: "both", paddingTop: 10}}>
+              <h5>Morse Text: <code className="animated bounce">{text}</code></h5>
+              {this.state.currentIndex !== -1 ? <h5>Current Morse Character: <code className="animated bounce">{text.split(" ")[this.state.currentIndex]}</code></h5> : ""}
+              {this.state.answer ? (
+                <h5>
+                  Decoded Text:&nbsp;
+                  <code className="animated bounce">{this.state.answer}</code>
+                  {this.state.currentIndex == -1 ? 
+                    <Link className="button is-info is-small pull-right" to={`/encode/${this.state.answer}`}>
+                      Encode {'"'}{this.state.answer}{'"'}
+                    </Link>
+                  : ""}
+                </h5>
+              ) : ""}
+            </div>
+          </div> : ""}
+        </div>
+      </div>
+    )
+  }
 
-	renderControls() {
-		return (
+  renderControls() {
+    return (
       <div>
         <h6>
           Animation Delay (Seconds)<br/>

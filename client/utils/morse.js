@@ -157,6 +157,8 @@ let tree = [
 module.exports = {
   encode, decode,
   decodePrefix,
-  tree
+  tree,
+  validWordRegex: /^[\dA-Za-z+=/\s]*$/,
+  validMorseRegex: /^[.\s_]*$/
 }
 
