@@ -7,6 +7,7 @@ export default class MorseTree extends React.Component {
     super(props)
     this.state = { screenWidth: window.innerWidth }
     this.updateDimensions = this.updateDimensions.bind(this)
+    this.ENLARGING_BREAKPOINT = 1600
   }
 
   updateDimensions() {
@@ -30,7 +31,7 @@ export default class MorseTree extends React.Component {
     return (
       <div className="container has-text-centered">
         {this.renderHeading()}
-        {this.renderNode("Start", ["e", "t"], currentCode == "" ? "" : "neutral", currentCode == "", screenWidth > 768 ? "large" : "medium")}
+        {this.renderNode("Start", ["e", "t"], currentCode == "" ? "" : "neutral", currentCode == "", screenWidth > this.ENLARGING_BREAKPOINT ? "large" : "medium")}
 
         {Array(5).fill(0).map((n, i) => (
           <div className="block" key={i}>
@@ -67,7 +68,7 @@ export default class MorseTree extends React.Component {
     )
   }
 
-  renderNode(text, children = [], type = "neutral", isActive = false, size = this.state.screenWidth > 768 ? "medium" : "small") {
+  renderNode(text, children = [], type = "neutral", isActive = false, size = this.state.screenWidth > this.ENLARGING_BREAKPOINT ? "medium" : "small") {
     return (
       <span style={{margin: "0.5%"}} key={text}>
         <span className={`is-character-${text}`}>
