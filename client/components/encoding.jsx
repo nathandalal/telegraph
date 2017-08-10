@@ -71,7 +71,7 @@ export default class Encoding extends React.Component {
   render() {
     return (
       <div className="content">
-        <div className="columns container">
+        <div className="columns is-tablet container">
           <div className="column is-one-thirds">
             {this.renderInput()}
             {this.renderTopButtons()}
@@ -109,11 +109,11 @@ export default class Encoding extends React.Component {
     return (
       <div className="block pull-right">
         {this.props.match.params.text ? <CopyToClipboard text={morse.encode(this.props.match.params.text).join("\n")}>
-          <button className="button is-small">Copy Encoded Words</button>
+          <button className="button is-small is-info is-outlined">Copy Encoded Words</button>
         </CopyToClipboard> : ""}
-        <button className="button is-small" 
+        <button className="button is-small is-outlined" 
           onClick={(() => this.setState({showControls: !this.state.showControls})).bind(this)}>
-          {this.state.showControls ? "Hide" : "Show"} Controls
+          {this.state.showControls ? "Hide Controls" : "Change Speed"}
         </button>
       </div>
     )
@@ -161,13 +161,16 @@ export default class Encoding extends React.Component {
 
   renderControls() {
     return (
-      <div>
+      <div className="has-text-centered">
         <h6>
           Animation Delay (Seconds)<br/>
           <small>Changes take effect on restart.</small>
         </h6>
         <Slider min={0} max={5} step={0.5} value={this.state.delayms * 1.0 / 1000}
           onChange={((val) => this.setState({delayms: val * 1000})).bind(this)} />
+        <a className="button is-primary is-outlined" onClick={this.startAnimation.bind(this)}>
+          Encode {`"${this.state.text}"`}
+        </a>
         <hr/>
       </div>
     )

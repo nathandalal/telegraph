@@ -36,7 +36,7 @@ export default class Lesson extends React.Component {
         <div className="columns">
           <div className="field has-addons column is-6">
             <div className="control is-expanded">
-              <input className="input" type="text" placeholder="Type a secret message here."
+              <input className="input" type="text" placeholder="Type your message here."
                 value={this.state.text}
                 onChange={(({target}) => morse.validWordRegex.test(target.value) ? this.setState({text: target.value.toLowerCase()}) : null).bind(this)}
                 onKeyPress={(({key}) => key == "Enter" ? this.props.history.push(`/encode/${this.state.text}`) : null).bind(this)}/>

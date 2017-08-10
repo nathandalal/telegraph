@@ -29,7 +29,7 @@ export default class MorseTree extends React.Component {
     if(!currentCode) possibleNodes.push("Start")
 
     return (
-      <div className="container has-text-centered">
+      <div className="has-text-centered">
         {this.renderHeading()}
         {this.renderNode("Start", ["e", "t"], currentCode == "" ? "" : "neutral", currentCode == "", screenWidth > this.ENLARGING_BREAKPOINT ? "large" : "medium")}
 

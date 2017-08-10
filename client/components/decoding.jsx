@@ -128,11 +128,11 @@ export default class Decoding extends React.Component {
     return (
       <div className="block pull-right">
         {this.props.match.params.text ? <CopyToClipboard text={morse.decode([this.props.match.params.text])}>
-          <button className="button is-small">Copy Decoded Answer</button>
+          <button className="button is-small is-info is-outlined">Copy Decoded Answer</button>
         </CopyToClipboard> : ""}
-        <button className="button is-small" 
+        <button className="button is-small is-outlined" 
           onClick={(() => this.setState({showControls: !this.state.showControls})).bind(this)}>
-          {this.state.showControls ? "Hide" : "Show"} Controls
+          {this.state.showControls ? "Hide Controls" : "Change Speed"}
         </button>
       </div>
     )
@@ -174,13 +174,16 @@ export default class Decoding extends React.Component {
 
   renderControls() {
     return (
-      <div>
+      <div className="has-text-centered">
         <h6>
           Animation Delay (Seconds)<br/>
           <small>Changes take effect on restart.</small>
         </h6>
         <Slider min={0} max={5} step={0.5} value={this.state.delayms * 1.0 / 1000}
           onChange={((val) => this.setState({delayms: val * 1000})).bind(this)} />
+        <a className="button is-primary is-outlined" onClick={this.startAnimation.bind(this)}>
+          Decode {`"${this.state.text}"`}
+        </a>
         <hr/>
       </div>
     )
