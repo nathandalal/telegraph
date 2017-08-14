@@ -91,9 +91,13 @@ export default class Encoding extends React.Component {
         <div className="field has-addons">
           <p className="control is-expanded">
             <input className="input" type="text" placeholder="Enter valid characters to encode." value={this.state.text}
-              onChange={(({target}) => morse.validWordRegex.test(target.value) ? this.setState({text: target.value.toLowerCase()}) : null).bind(this)}
+              onChange={(({target}) => this.setState({text: morse.makeValidMorse(target.value)})).bind(this)}
               onKeyPress={(({key}) => key == "Enter" ? this.startAnimation() : null).bind(this)}
               style={{fontFamily: "Consolas,Monaco,Lucida Console,monospace"}}/>
+            <p className="help is-info">
+              Between every sequence of characters, add a space.<br/>
+              Only the characters in the morse tree will be accepted as input.
+            </p>
           </p>
           <p className="control">
             <a className="button is-primary" onClick={this.startAnimation.bind(this)}>

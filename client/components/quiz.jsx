@@ -100,6 +100,7 @@ export default class Quiz extends React.Component {
           <span className="icon is-small is-right">
             <i className="fa fa-check" style={{color: this.isCorrectInput(info) ? "#23d160" : ""}}/>
           </span>
+          {info.label == "Encode" ? <p className="help is-info">Between every sequence of characters, add a space.</p> : ""}
         </p>
       </div>
     )

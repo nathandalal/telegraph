@@ -38,7 +38,7 @@ export default class Lesson extends React.Component {
             <div className="control is-expanded">
               <input className="input" type="text" placeholder="Type your message here."
                 value={this.state.text}
-                onChange={(({target}) => morse.validWordRegex.test(target.value) ? this.setState({text: target.value.toLowerCase()}) : null).bind(this)}
+                onChange={(({target}) => this.setState({text: morse.makeValidMorse(target.value)}) : null).bind(this)}
                 onKeyPress={(({key}) => key == "Enter" ? this.props.history.push(`/encode/${this.state.text}`) : null).bind(this)}/>
             </div>
             <div className="control">

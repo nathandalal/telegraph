@@ -95,15 +95,6 @@ let morseStrings = Object.keys(decoderMap)
 let morseTrie = trie(morseStrings)
 let decodePrefix = (letter) => letter ? morseTrie.getPrefix(letter).map(c => decoderMap[c]) : morseStrings.map(c => decoderMap[c])
 
-// let morseStringToTreeEntry = (morse) => {
-//   let answer = {}
-//   answer.text = decoderMap[morse]
-//   answer.level = morse.length
-//   answer.children = [decoderMap[morse + "."], decoderMap[morse + "_"]]
-//   return answer
-// }
-// let tree = Object.keys(decoderMap).map(morseStringToTreeEntry)
-// tree = tree.filter(node => node.text != " ")
 let tree = [
   { text: 'e', level: 1, children: [ 'i', 'a' ], type: '.' },
   { text: 't', level: 1, children: [ 'n', 'm' ], type: '_' },
@@ -154,11 +145,18 @@ let tree = [
   { text: '0',      level: 5, children: [ undefined, undefined ], type: "_" },
 ]
 
+let validWordRegex = /^[\dA-Za-z+=/\s]*$/
+let validMorseRegex = /^[.\s_]*$/
+
+let makeValidMorse = (str) => {
+  return str.split("").filter(c => validWordRegex.test(c)).join("").toLowerCase()
+}
+
 module.exports = {
   encode, decode,
   decodePrefix,
   tree,
-  validWordRegex: /^[\dA-Za-z+=/\s]*$/,
-  validMorseRegex: /^[.\s_]*$/
+  validWordRegex, validMorseRegex,
+  makeValidMorse
 }
 
