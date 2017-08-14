@@ -194,10 +194,7 @@ export default class Encoding extends React.Component {
         <h6>
           Below is an example of a line of code in Python that would do this mapping.
         </h6>
-        <pre>
-          <span style={{fontWeight: "bold"}}>if</span> character <span style={{color:"#44aadd"}}>==</span> <span style={{color:"#0000e6"}}>"._"</span><span style={{color:"#808030"}}>:</span><br/>
-          &nbsp;&nbsp;&nbsp;&nbsp;<span style={{fontWeight: "bold"}}>return</span> <span style={{color:"#0000e6"}}>"A"</span>
-        </pre>
+        <pre><span style={{color: '#800000', fontWeight: 'bold'}}>if</span> character <span style={{color:"#44aadd"}}>==</span> <span style={{color:"#0000e6"}}>"._"</span><span style={{color:"#808030"}}>:</span>{'\n'}    <span style={{color: '#800000', fontWeight: 'bold'}}>return</span> <span style={{color:"#0000e6"}}>"A"</span></pre>
       </div>
     )
   }
