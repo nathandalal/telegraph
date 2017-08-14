@@ -76,6 +76,7 @@ export default class Encoding extends React.Component {
             {this.renderInput()}
             {this.renderTopButtons()}
             {this.renderAnimation()}
+            {this.renderExplanation()}
           </div>
           <div className="column is-two-thirds">
             <MorseTree currentCode={this.state.morseChar}/>
@@ -94,10 +95,10 @@ export default class Encoding extends React.Component {
               onChange={(({target}) => this.setState({text: morse.makeValidMorse(target.value)})).bind(this)}
               onKeyPress={(({key}) => key == "Enter" ? this.startAnimation() : null).bind(this)}
               style={{fontFamily: "Consolas,Monaco,Lucida Console,monospace"}}/>
-            <p className="help is-info">
+            <span className="help is-info">
               Between every sequence of characters, add a space.<br/>
               Only the characters in the morse tree will be accepted as input.
-            </p>
+            </span>
           </p>
           <p className="control">
             <a className="button is-primary" onClick={this.startAnimation.bind(this)}>
@@ -176,6 +177,27 @@ export default class Encoding extends React.Component {
           Encode {`"${this.state.text}"`}
         </a>
         <hr/>
+      </div>
+    )
+  }
+
+  renderExplanation() {
+    return (
+      <div className="content">
+        <h6>
+          Encoding characters to morse code is done using a mapping from characters to code.
+          People used typewriters and electric signals were mapped to specific characters on the typewriter.
+        </h6>
+        <h6>
+          Just like a dictionary, each character was mapped to its specific "dit" and "dah" sequence.
+        </h6>
+        <h6>
+          Below is an example of a line of code in Python that would do this mapping.
+        </h6>
+        <pre>
+          <span style={{fontWeight: "bold"}}>if</span> character <span style={{color:"#44aadd"}}>==</span> <span style={{color:"#0000e6"}}>"._"</span><span style={{color:"#808030"}}>:</span><br/>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span style={{fontWeight: "bold"}}>return</span> <span style={{color:"#0000e6"}}>"A"</span>
+        </pre>
       </div>
     )
   }
