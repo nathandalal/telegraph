@@ -192,9 +192,9 @@ export default class Encoding extends React.Component {
           Just like a dictionary, each character was mapped to its specific "dit" and "dah" sequence.
         </h6>
         <h6>
-          Below is an example of a line of code in Python that would do this mapping.
+          Below is an example of a small piece of Python code that would do this mapping.
         </h6>
-        <pre><span style={{color: '#800000', fontWeight: 'bold'}}>if</span> character <span style={{color:"#44aadd"}}>==</span> <span style={{color:"#0000e6"}}>"._"</span><span style={{color:"#808030"}}>:</span>{'\n'}    <span style={{color: '#800000', fontWeight: 'bold'}}>return</span> <span style={{color:"#0000e6"}}>"A"</span></pre>
+        <pre><span style={{color: '#800000', fontWeight: 'bold'}}>if</span> character <span style={{color:"#44aadd"}}>==</span> <span style={{color:"#0000e6"}}>"A"</span><span style={{color:"#808030"}}>:</span>{'\n'}    <span style={{color: '#800000', fontWeight: 'bold'}}>return</span> <span style={{color:"#0000e6"}}>"._"</span></pre>
       </div>
     )
   }
