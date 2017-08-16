@@ -77,7 +77,7 @@ export default class Quiz extends React.Component {
       <div className="field" key={info.questionIndex}>
         <label className="label">
           {info.label}&nbsp;
-          <code>{info.prompt}</code>
+          <code style={info.label == "Encode" ? {} : {letterSpacing: 2}}>{info.prompt}</code>
           <Link className="button is-small pull-right" target="_blank" rel="noopener" to={`/${info.label.toLowerCase()}/${info.prompt}`}>Show Me</Link>
         </label>
         {info.label == "Encode" ? <small>You can hover over any letter in the tree to get its individual morse code.</small> : ""}
@@ -85,7 +85,7 @@ export default class Quiz extends React.Component {
           <input className={`input
             ${this.isCorrectInput(info) || !(info.value) ? "" : "is-danger"}`}
             type="text" value={info.value} disabled={this.isCorrectInput(info)}
-            placeholder={info.label == "Encode" ? "Only . _ and spaces allowed." : "Enter valid characters to encode."}
+            placeholder={info.label == "Encode" ? "Only . _ and spaces allowed." : "Enter valid characters."}
             onChange={((event) => {
               let currentRegex = info.label == "Encode" ? morse.validMorseRegex : morse.validWordRegex
               if(currentRegex.test(event.target.value)) {
@@ -93,7 +93,8 @@ export default class Quiz extends React.Component {
                 stateChange["questions"][info.questionIndex].userAnswer = event.target.value.toLowerCase()
                 this.setState(stateChange)
               }
-            }).bind(this)} />
+            }).bind(this)}
+            style={info.label == "Encode" ? {letterSpacing: 2} : {}}/>
           <span className="icon is-small is-left">
             <i className={`fa fa-${info.icon}`} />
           </span>

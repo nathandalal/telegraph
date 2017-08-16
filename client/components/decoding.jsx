@@ -113,7 +113,7 @@ export default class Decoding extends React.Component {
             <input className="input" type="text" placeholder="Only . _ and spaces allowed." value={this.state.text}
               onChange={(({target}) => morse.validMorseRegex.test(target.value) ? this.setState({text: target.value}) : null).bind(this)}
               onKeyPress={(({key}) => key == "Enter" ? this.startAnimation() : null).bind(this)}
-              style={{fontFamily: "Consolas,Monaco,Lucida Console,monospace"}}/>
+              style={{letterSpacing: 2}}/>
           </p>
           <p className="control">
             <a className="button is-primary" onClick={this.startAnimation.bind(this)}>
@@ -153,7 +153,7 @@ export default class Decoding extends React.Component {
               <span className="tag is-primary pull-right"><span className="icon is-small"><i className="fa fa-check"/></span><span>Done</span></span> :
               <span className="tag is-info pull-right">Translating:&nbsp;<tt>{text.split(" ")[this.state.currentIndex].split("").join(" ")}</tt></span>}
             <div style={{clear: "both", paddingTop: 10}}>
-              <h5>Morse Text: <code className="animated bounce">{text}</code></h5>
+              <h5>Morse Text: <code className="animated bounce" style={{letterSpacing: 2}}>{text}</code></h5>
               {this.state.currentIndex !== -1 ? <h5>Current Morse Character: <code className="animated bounce">{text.split(" ")[this.state.currentIndex]}</code></h5> : ""}
               {this.state.answer ? (
                 <h5>

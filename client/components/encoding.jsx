@@ -93,8 +93,7 @@ export default class Encoding extends React.Component {
           <p className="control is-expanded">
             <input className="input" type="text" placeholder="Enter valid characters to encode." value={this.state.text}
               onChange={(({target}) => this.setState({text: morse.makeValidMorse(target.value)})).bind(this)}
-              onKeyPress={(({key}) => key == "Enter" ? this.startAnimation() : null).bind(this)}
-              style={{fontFamily: "Consolas,Monaco,Lucida Console,monospace"}}/>
+              onKeyPress={(({key}) => key == "Enter" ? this.startAnimation() : null).bind(this)} />
             <span className="help is-info">
               Between every sequence of characters, add a space.<br/>
               Only the characters in the morse tree will be accepted as input.
@@ -146,7 +145,7 @@ export default class Encoding extends React.Component {
                     <h6>Word {index + 1}: ({text.split(' ')[index]})</h6>
                     <div className="columns is-mobile">
                       <div className="column is-7">
-                        <h6><code className="animated bounce">{word}</code></h6>
+                        <h6><code className="animated bounce" style={{letterSpacing: 2}}>{word}</code></h6>
                       </div>
                       <div className="column is-5">
                         {index < this.state.currentIndex || this.state.currentIndex == -1 ? 
@@ -194,7 +193,7 @@ export default class Encoding extends React.Component {
         <h6>
           Below is an example of a small piece of Python code that would do this mapping.
         </h6>
-        <pre><span style={{color: '#800000', fontWeight: 'bold'}}>if</span> character <span style={{color:"#44aadd"}}>==</span> <span style={{color:"#0000e6"}}>"A"</span><span style={{color:"#808030"}}>:</span>{'\n'}    <span style={{color: '#800000', fontWeight: 'bold'}}>return</span> <span style={{color:"#0000e6"}}>"._"</span></pre>
+        <pre><span style={{color: '#800000', fontWeight: 'bold'}}>if</span> character <span style={{color:"#44aadd"}}>==</span> <span style={{color:"#0000e6"}}>"{morse.decode([this.state.morseChar || "._"]).toUpperCase()}"</span><span style={{color:"#808030"}}>:</span>{'\n'}    <span style={{color: '#800000', fontWeight: 'bold'}}>return</span> <span style={{color:"#0000e6"}}>"{this.state.morseChar || "._"}"</span></pre>
       </div>
     )
   }
